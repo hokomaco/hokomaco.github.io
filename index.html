@@ -244,12 +244,6 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
       <label for="langSelect" id="langLabel">Language</label>
       <select id="langSelect" class="lang-select" aria-label="Language">
         <option value="en">English</option>
-        <option value="es">Español</option>
-        <option value="fr">Français</option>
-        <option value="ja">日本語</option>
-        <option value="pt">Português</option>
-        <option value="de">Deutsch</option>
-        <option value="ko">한국어</option>
         <option value="zh-Hans">简体中文</option>
         <option value="zh-Hant">繁體中文</option>
       </select>
@@ -339,7 +333,7 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
   </article>
 </div>
 <script>
-var LANGS=["en","es","fr","ja","pt","de","ko","zh-Hans","zh-Hant"];
+var LANGS=["en","zh-Hans","zh-Hant"];
 var curLang="en";
 function L(o){ if(o==null) return ""; if(typeof o==="string") return o; return o[curLang]||o.en||""; }
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");}
