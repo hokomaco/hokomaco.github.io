@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main
       - name: Download release asset and replace index.html
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -31,4 +33,4 @@ jobs:
           git add index.html
           git diff --cached --quiet && echo "No changes to commit" && exit 0
           git commit -m "Deploy language-trimmed index.html"
-          git push
+          git push origin HEAD:main
