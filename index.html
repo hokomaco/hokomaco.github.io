@@ -70,12 +70,12 @@ body[data-lang="zh-Hans"] .hero p.lead,body[data-lang="zh-Hant"] .hero p.lead,bo
 .person b{display:block;font-size:17px;line-height:1.3;white-space:normal;word-break:normal;overflow-wrap:break-word}
 .person span{display:block;font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.6;white-space:normal;word-break:normal;overflow-wrap:break-word}
 .person .p-txt>span{white-space:normal;word-break:normal;overflow-wrap:break-word}
-.person i{font-style:normal;display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--red-dark);background:var(--red-soft);padding:3px 8px;border-radius:999px;line-height:1.5}
+.person i{font-style:normal;display:inline-block;margin-top:8px;font-size:11px;font-weight:700;color:var(--red-dark);background:var(--red-soft);padding:3px 8px;border-radius:999px;line-height:1.5;white-space:nowrap}
 .person .p-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
 .person .p-pills i{margin-top:0}
 .person i.catpill{background:var(--bg);border:1px solid var(--line);color:var(--muted)}
 .catbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
-.cat-chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:14.5px;font-weight:600;box-shadow:var(--shadow)}
+.cat-chip{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 16px;font-size:14.5px;font-weight:600;box-shadow:var(--shadow);white-space:nowrap;flex:0 0 auto;line-height:1.45}
 .cat-chip .cat-n{font-size:12px;color:var(--muted);font-weight:700}
 .cat-chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .cat-chip[aria-pressed="true"] .cat-n{color:var(--bg);opacity:.75}
@@ -1218,11 +1218,11 @@ ARTICLES.push(
 var FILTERS=[{id:"all"},{id:"einstein"},{id:"tesla"},{id:"curie"},{id:"cleopatra"},{id:"davinci"},{id:"newton"},{id:"shakespeare"},{id:"alexander"},{id:"mozart"},{id:"vangogh"},{id:"edison"},{id:"joan"},{id:"darwin"},{id:"galileo"},{id:"gutenberg"},{id:"dickens"},{id:"earhart"},{id:"napoleon"},{id:"gandhi"},{id:"mandela"},{id:"lincoln"},{id:"churchill"},{id:"beethoven"},{id:"michelangelo"},{id:"austen"},{id:"twain"},{id:"genghis"},{id:"bach"},{id:"nightingale"},{id:"confucius"},{id:"note"}];
 var state={filter:"all",query:"",cat:"all"};
 var CATS=[
-{id:"science",label:{en:"Scientists","zh-Hans":"科学家","zh-Hant":"科學家"}},
-{id:"art",label:{en:"Artists","zh-Hans":"艺术家","zh-Hant":"藝術家"}},
-{id:"ruler",label:{en:"Rulers & Leaders","zh-Hans":"统治者与领袖","zh-Hant":"統治者與領袖"}},
-{id:"writer",label:{en:"Writers & Thinkers","zh-Hans":"作家与思想家","zh-Hant":"作家與思想家"}},
-{id:"explorer",label:{en:"Explorers","zh-Hans":"探险家","zh-Hant":"探險家"}}];
+{id:"science",label:{en:"Big Brains","zh-Hans":"脑洞组","zh-Hant":"腦洞組"}},
+{id:"art",label:{en:"Artists","zh-Hans":"艺能组","zh-Hant":"藝能組"}},
+{id:"ruler",label:{en:"Leaders","zh-Hans":"掌权组","zh-Hant":"掌權組"}},
+{id:"writer",label:{en:"Storytellers","zh-Hans":"讲故事组","zh-Hant":"講故事組"}},
+{id:"explorer",label:{en:"Explorers","zh-Hans":"远行组","zh-Hant":"遠行組"}}];
 var catMap={}; CATS.forEach(function(c){catMap[c.id]=c;});
 var CATBAR_ARIA={en:"Filter by field","zh-Hans":"按领域筛选","zh-Hant":"按領域篩選"};
 function catLabel(c){var m=catMap[c];return m?L(m.label):"";}
