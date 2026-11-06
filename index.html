@@ -187,6 +187,38 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
 .r-nav .btn{flex:1 1 200px;padding:14px;white-space:normal;line-height:1.5}
 .fontctl{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
 @media(max-width:520px){.r-nav{flex-direction:column}.r-nav .btn{flex:1 1 auto;width:100%}}
+.play-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+@media(max-width:860px){.play-grid{grid-template-columns:1fr}}
+.game{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.game h3{margin:0;font-size:20px;line-height:1.35}
+.game .g-desc{margin:0;color:var(--muted);font-size:14.5px;line-height:1.65}
+.g-progress{font-size:13px;font-weight:700;color:var(--red-dark);letter-spacing:.02em}
+.g-q{font-size:17.5px;line-height:1.55;font-weight:700;margin:0}
+.g-opts{display:flex;flex-direction:column;gap:8px}
+.g-opt{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:12px 14px;font-size:15.5px;text-align:left;line-height:1.5;width:100%}
+.g-opt:hover{border-color:var(--red)}
+.g-opt.picked{border-color:var(--ink);font-weight:700}
+.g-opt.right{border-color:#1a7f4b;background:#e7f6ec;color:#14532d}
+.g-opt.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red-dark)}
+@media(prefers-color-scheme:dark){.g-opt.right{background:#14301f;color:#a7e8bd}}
+.g-fb{font-size:14.5px;line-height:1.6;min-height:1.2em}
+.g-fb b{color:#1a7f4b}
+.g-row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.g-score{font-size:26px;font-weight:900}
+.g-review{font-size:14px;line-height:1.6;border-top:1px solid var(--line);padding-top:10px;display:flex;flex-direction:column;gap:10px}
+.g-review .rv{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.g-review .rv p{margin:0 0 4px}
+.linkbtn{background:none;border:0;color:var(--red-dark);font-weight:700;text-decoration:underline;padding:0;font-size:14px;cursor:pointer}
+.tl-pool,.tl-placed{display:flex;flex-direction:column;gap:8px;min-height:44px}
+.tl-item{border:1.5px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:11px 13px;font-size:15px;text-align:left;line-height:1.5;width:100%;cursor:grab}
+.tl-item:hover{border-color:var(--red)}
+.tl-placed .tl-item{cursor:pointer;background:var(--surface)}
+.tl-placed .tl-item.ok{border-color:#1a7f4b;background:#e7f6ec}
+@media(prefers-color-scheme:dark){.tl-placed .tl-item.ok{background:#14301f}}
+.tl-label{font-size:12.5px;font-weight:700;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.tl-empty{font-size:14px;color:var(--muted);border:1.5px dashed var(--line);border-radius:12px;padding:11px 13px;line-height:1.5}
+.tl-persons{display:flex;gap:6px;flex-wrap:wrap}
+.tl-persons .chip{padding:6px 12px;font-size:13.5px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 .topbar-in>*,.hero>*,.about>*,.seq>*,.legs>*,.people-row>*,.reader-bar-in>*,.r-nav>*{min-width:0}
 </style>
@@ -198,6 +230,7 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
     <label class="search"><span aria-hidden="true">🔍</span><input id="searchInput" type="search" placeholder="Search: Nobel, current, Mona Lisa"></label>
     <nav class="topnav">
       <a href="#feed-sec" data-i18n-nav="notes">Notes</a>
+      <a href="#play-sec" data-i18n-nav="play">Play</a>
       <a href="#people-sec" data-i18n-nav="people">By Person</a>
       <a href="#seq-sec" data-i18n-nav="order">Order</a>
       <a href="#about-sec" data-i18n-nav="about">About</a>
@@ -236,6 +269,22 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
     <div class="chips" id="chips" role="group"></div>
     <div class="feed" id="feed"></div>
     <p class="empty" id="emptyMsg"></p>
+  </section>
+  <section class="block" id="play-sec">
+    <div class="sec-head"><h2 id="playHeading"></h2><p id="playSub"></p></div>
+    <div class="play-grid">
+      <div class="game" id="quizGame">
+        <h3 id="quizTitle"></h3>
+        <p class="g-desc" id="quizDesc"></p>
+        <div id="quizBody"></div>
+      </div>
+      <div class="game" id="tlGame">
+        <h3 id="tlTitle"></h3>
+        <p class="g-desc" id="tlDesc"></p>
+        <div class="tl-persons" id="tlPersons"></div>
+        <div id="tlBody"></div>
+      </div>
+    </div>
   </section>
   <section class="block" id="seq-sec">
     <div class="sec-head"><h2 id="prodHeading"></h2><p id="prodSub"></p></div>
@@ -947,6 +996,188 @@ document.getElementById("reader").addEventListener("scroll",function(e){var el=e
 document.getElementById("fontToggle").addEventListener("click",function(){var b=document.getElementById("rBody");var big=b.classList.toggle("big");this.textContent=big?L(UI.standard):L(UI.large);this.setAttribute("aria-pressed",big);});
 document.getElementById("searchInput").addEventListener("input",function(){state.query=this.value.trim();renderFeed();});
 renderAll();
+</script>
+<script>
+UI.navPlay={en:"Play",es:"Jugar",fr:"Jouer",ja:"遊ぶ",pt:"Jogar",de:"Spielen",ko:"놀이","zh-Hans":"玩一玩","zh-Hant":"玩一玩"};
+UI.playHeading={en:"Play · Games",es:"Juega · Juegos",fr:"Jouer · Jeux",ja:"遊ぶ · ゲーム",pt:"Jogar · Jogos",de:"Spielen · Spiele",ko:"놀이 · 게임","zh-Hans":"玩一玩 · 小游戏","zh-Hant":"玩一玩 · 小遊戲"};
+UI.playSub={en:"Read the stories, then test yourself — every question comes from the articles above.",es:"Lee las historias y luego ponte a prueba: cada pregunta viene de los artículos de arriba.",fr:"Lisez les histoires, puis testez-vous — chaque question vient des articles ci-dessus.",ja:"物語を読んだら、腕試しをどうぞ。すべての問題は上の記事から出題しています。",pt:"Leia as histórias e depois teste-se — cada pergunta vem dos artigos acima.",de:"Lesen Sie die Geschichten und testen Sie sich dann — jede Frage stammt aus den Artikeln oben.",ko:"이야기를 읽은 뒤 실력을 확인해 보세요. 모든 문제는 위 글에서 나왔습니다.","zh-Hans":"读完文章就来测一测——每道题都出自上面的文章","zh-Hant":"讀完文章就來測一測——每道題都出自上面的文章"};
+UI.quizTitle={en:"Biography Quiz",es:"Quiz biográfico",fr:"Quiz biographique",ja:"伝記クイズ",pt:"Quiz biográfico",de:"Biografie-Quiz",ko:"전기 퀴즈","zh-Hans":"传记问答","zh-Hant":"傳記問答"};
+UI.quizDesc={en:"10 questions, one for each of the 10 lives on this site. Four choices each — how many can you get right?",es:"10 preguntas, una por cada una de las 10 vidas de este sitio. Cuatro opciones cada una: ¿cuántas aciertas?",fr:"10 questions, une pour chacune des 10 vies de ce site. Quatre choix chacune — combien en trouverez-vous ?",ja:"このサイトの10人から1問ずつ、全10問。四つの選択肢から選んでください。",pt:"10 perguntas, uma para cada uma das 10 vidas deste site. Quatro opções cada — quantas você acerta?",de:"10 Fragen, eine zu jedem der 10 Leben auf dieser Seite. Je vier Antworten — wie viele schaffen Sie?",ko:"이 사이트의 10명에서 한 문제씩, 총 10문제. 네 가지 선택지 중 골라 보세요.","zh-Hans":"10 道题，站上 10 位名人每人一道，每题 4 个选项——你能答对几道？","zh-Hant":"10 道題，站上 10 位名人每人一道，每題 4 個選項——你能答對幾道？"};
+UI.tlTitle={en:"Timeline Puzzle",es:"Rompecabezas cronológico",fr:"Puzzle chronologique",ja:"年表パズル",pt:"Quebra-cabeça da linha do tempo",de:"Zeitlinien-Puzzle",ko:"연표 퍼즐","zh-Hans":"时间线拼图","zh-Hant":"時間線拼圖"};
+UI.tlDesc={en:"Five big moments from one life, shuffled. Put them back in time order.",es:"Cinco grandes momentos de una vida, mezclados. Ponlos en orden cronológico.",fr:"Cinq grands moments d'une vie, mélangés. Remettez-les dans l'ordre chronologique.",ja:"ある人生の五つの大きな出来事をシャッフルしました。時間順に並べ直してください。",pt:"Cinco grandes momentos de uma vida, embaralhados. Coloque-os em ordem cronológica.",de:"Fünf große Momente eines Lebens, durcheinander. Bringen Sie sie wieder in die richtige Reihenfolge.",ko:"한 사람의 다섯 가지 큰 사건을 섞었습니다. 시간 순서대로 다시 배열해 보세요.","zh-Hans":"一位名人一生的 5 件大事被打乱了，把它们按时间排回来。","zh-Hant":"一位名人一生的 5 件大事被打亂了，把它們按時間排回來。"};
+UI.qOf={en:"Question",es:"Pregunta",fr:"Question",ja:"第",pt:"Pergunta",de:"Frage",ko:"문제","zh-Hans":"第","zh-Hant":"第"};
+UI.qOfSuffix={en:"of 10",es:"de 10",fr:"sur 10",ja:"問 / 全10問",pt:"de 10",de:"von 10",ko:"/ 10문제","zh-Hans":"题 / 共 10 题","zh-Hant":"題 / 共 10 題"};
+UI.nextQ={en:"Next question →",es:"Siguiente pregunta →",fr:"Question suivante →",ja:"次の問題へ →",pt:"Próxima pergunta →",de:"Nächste Frage →",ko:"다음 문제 →","zh-Hans":"下一题 →","zh-Hant":"下一題 →"};
+UI.seeScore={en:"See my score →",es:"Ver mi puntuación →",fr:"Voir mon score →",ja:"結果を見る →",pt:"Ver minha pontuação →",de:"Ergebnis ansehen →",ko:"점수 보기 →","zh-Hans":"看得分 →","zh-Hant":"看得分 →"};
+UI.rightFb={en:"Correct!",es:"¡Correcto!",fr:"Correct !",ja:"正解！",pt:"Correto!",de:"Richtig!",ko:"정답!","zh-Hans":"答对了！","zh-Hant":"答對了！"};
+UI.wrongFb={en:"Not quite — the correct answer is highlighted in green.",es:"Casi: la respuesta correcta está en verde.",fr:"Pas tout à fait — la bonne réponse est en vert.",ja:"残念。正解は緑で表示しています。",pt:"Quase — a resposta correta está em verde.",de:"Nicht ganz — die richtige Antwort ist grün markiert.",ko:"아쉽습니다. 정답은 초록색으로 표시했습니다.","zh-Hans":"差一点——正确答案已经标绿了。","zh-Hant":"差一點——正確答案已經標綠了。"};
+UI.yourScore={en:"Your score",es:"Tu puntuación",fr:"Votre score",ja:"あなたのスコア",pt:"Sua pontuação",de:"Ihr Ergebnis",ko:"내 점수","zh-Hans":"你的得分","zh-Hant":"你的得分"};
+UI.scoreGreat={en:"Outstanding — you really read the stories!",es:"¡Sobresaliente: realmente leíste las historias!",fr:"Excellent — vous avez vraiment lu les histoires !",ja:"素晴らしい！本当に物語を読んでいますね。",pt:"Excelente — você realmente leu as histórias!",de:"Hervorragend — Sie haben die Geschichten wirklich gelesen!",ko:"훌륭합니다. 이야기를 정말 읽으셨네요!","zh-Hans":"太厉害了——文章你是真读进去了！","zh-Hant":"太厲害了——文章你是真讀進去了！"};
+UI.scoreGood={en:"Well done! Missed a few? Tap a story link below and try again.",es:"¡Bien hecho! ¿Fallaste algunas? Toca un enlace de abajo e inténtalo de nuevo.",fr:"Bien joué ! Quelques erreurs ? Touchez un lien ci-dessous et réessayez.",ja:"よくできました！間違えた問題は、下のリンクから物語を読み直してみてください。",pt:"Muito bem! Errou algumas? Toque num link abaixo e tente de novo.",de:"Gut gemacht! Ein paar daneben? Tippen Sie unten auf einen Link und versuchen Sie es erneut.",ko:"잘하셨습니다! 틀린 문제는 아래 링크로 이야기를 다시 읽어 보세요.","zh-Hans":"不错！答错的几道，点下面的链接回去读一遍原文再来。","zh-Hant":"不錯！答錯的幾道，點下面的連結回去讀一遍原文再來。"};
+UI.scoreLow={en:"A good start — the answers are all in the stories. Read one and come back!",es:"Buen comienzo: las respuestas están en las historias. ¡Lee una y vuelve!",fr:"Bon début — les réponses sont toutes dans les histoires. Lisez-en une et revenez !",ja:"いいスタートです。答えはすべて物語の中にあります。一つ読んで戻ってきてください！",pt:"Bom começo — as respostas estão todas nas histórias. Leia uma e volte!",de:"Ein guter Anfang — die Antworten stehen alle in den Geschichten. Lesen Sie eine und kommen Sie zurück!",ko:"좋은 시작입니다. 답은 모두 이야기 속에 있습니다. 하나 읽고 다시 와 보세요!","zh-Hans":"很好的开始——答案都在文章里，读完一篇再回来挑战！","zh-Hant":"很好的開始——答案都在文章裡，讀完一篇再回來挑戰！"};
+UI.playAgain={en:"Play again",es:"Jugar otra vez",fr:"Rejouer",ja:"もう一度遊ぶ",pt:"Jogar de novo",de:"Nochmal spielen",ko:"다시 하기","zh-Hans":"再玩一次","zh-Hant":"再玩一次"};
+UI.yourPick={en:"You picked",es:"Elegiste",fr:"Vous avez choisi",ja:"あなたの答え",pt:"Você escolheu",de:"Ihre Wahl",ko:"내 선택","zh-Hans":"你选了","zh-Hant":"你選了"};
+UI.answerIs={en:"Correct answer",es:"Respuesta correcta",fr:"Bonne réponse",ja:"正解",pt:"Resposta correta",de:"Richtige Antwort",ko:"정답","zh-Hans":"正确答案","zh-Hant":"正確答案"};
+UI.readStory={en:"Read the story →",es:"Leer la historia →",fr:"Lire l'histoire →",ja:"物語を読む →",pt:"Ler a história →",de:"Geschichte lesen →",ko:"이야기 읽기 →","zh-Hans":"回去读原文 →","zh-Hant":"回去讀原文 →"};
+UI.tlTapHint={en:"Tap an event (or drag it) to add it to your timeline below. Tap a placed event to send it back.",es:"Toca un evento (o arrástralo) para añadirlo a tu cronología. Toca un evento colocado para devolverlo.",fr:"Touchez un événement (ou faites-le glisser) pour l'ajouter à votre chronologie. Touchez un événement placé pour le retirer.",ja:"イベントをタップ（またはドラッグ）すると下の年表に追加されます。配置済みをタップすると戻ります。",pt:"Toque num evento (ou arraste-o) para adicioná-lo à sua linha do tempo. Toque num evento colocado para devolvê-lo.",de:"Tippen Sie auf ein Ereignis (oder ziehen Sie es), um es unten einzufügen. Tippen Sie auf ein gesetztes Ereignis, um es zurückzunehmen.",ko:"사건을 눌러(또는 끌어) 아래 연표에 추가하세요. 배치한 사건을 누르면 되돌아갑니다.","zh-Hans":"点一件大事（也可以拖动）把它放进下面的时间线；点已放好的可以把它撤回。","zh-Hant":"點一件大事（也可以拖動）把它放進下面的時間線；點已放好的可以把它撤回。"};
+UI.tlPoolLabel={en:"Shuffled events",es:"Eventos mezclados",fr:"Événements mélangés",ja:"シャッフルされた出来事",pt:"Eventos embaralhados",de:"Gemischte Ereignisse",ko:"섞인 사건","zh-Hans":"打乱的大事","zh-Hant":"打亂的大事"};
+UI.tlYourLabel={en:"Your timeline · earliest first",es:"Tu cronología · la más antigua primero",fr:"Votre chronologie · la plus ancienne d'abord",ja:"あなたの年表 · 古い順",pt:"Sua linha do tempo · mais antiga primeiro",de:"Ihre Zeitlinie · älteste zuerst",ko:"내 연표 · 가장 이른 것부터","zh-Hans":"你的时间线 · 从最早开始","zh-Hant":"你的時間線 · 從最早開始"};
+UI.tlEmpty={en:"Nothing here yet — tap an event above to start.",es:"Aún nada aquí: toca un evento arriba para empezar.",fr:"Rien ici pour l'instant — touchez un événement ci-dessus.",ja:"まだ何もありません。上のイベントをタップして始めましょう。",pt:"Nada aqui ainda — toque num evento acima para começar.",de:"Noch nichts hier — tippen Sie oben auf ein Ereignis.",ko:"아직 비어 있습니다. 위 사건을 눌러 시작하세요.","zh-Hans":"这里还空着——点上面任意一件大事开始。","zh-Hant":"這裡還空著——點上面任意一件大事開始。"};
+UI.checkBtn={en:"Check my order",es:"Comprobar mi orden",fr:"Vérifier mon ordre",ja:"順番をチェック",pt:"Verificar minha ordem",de:"Reihenfolge prüfen",ko:"순서 확인","zh-Hans":"检查顺序","zh-Hant":"檢查順序"};
+UI.resetBtn={en:"Shuffle again",es:"Mezclar de nuevo",fr:"Mélanger à nouveau",ja:"シャッフルし直す",pt:"Embaralhar de novo",de:"Neu mischen",ko:"다시 섞기","zh-Hans":"重新打乱","zh-Hant":"重新打亂"};
+UI.nextPerson={en:"Next person →",es:"Siguiente persona →",fr:"Personne suivante →",ja:"次の人物へ →",pt:"Próxima pessoa →",de:"Nächste Person →",ko:"다음 인물 →","zh-Hans":"换一位名人 →","zh-Hant":"換一位名人 →"};
+UI.tlNeedAll={en:"Place all 5 events first, then check.",es:"Coloca primero los 5 eventos y luego comprueba.",fr:"Placez d'abord les 5 événements, puis vérifiez.",ja:"まず5つすべて配置してからチェックしてください。",pt:"Coloque os 5 eventos primeiro, depois verifique.",de:"Setzen Sie zuerst alle 5 Ereignisse und prüfen Sie dann.",ko:"먼저 5개 사건을 모두 배치한 뒤 확인하세요.","zh-Hans":"先把 5 件大事都放好，再点检查。","zh-Hant":"先把 5 件大事都放好，再點檢查。"};
+UI.tlPerfect={en:"Perfect order — you know this life by heart!",es:"¡Orden perfecto: conoces esta vida de memoria!",fr:"Ordre parfait — vous connaissez cette vie par cœur !",ja:"完璧な順番です！この生涯をよく知っていますね。",pt:"Ordem perfeita — você conhece esta vida de cor!",de:"Perfekte Reihenfolge — Sie kennen dieses Leben auswendig!",ko:"완벽한 순서입니다. 이 삶을 속속들이 아시네요!","zh-Hans":"全排对了——这位的一生你已经了如指掌！","zh-Hant":"全排對了——這位的一生你已經瞭如指掌！"};
+UI.tlSomeRight={en:"in the right place",es:"en el lugar correcto",fr:"à la bonne place",ja:"件が正しい位置です",pt:"no lugar certo",de:"an der richtigen Stelle",ko:"개가 제자리에 있습니다","zh-Hans":"件位置正确","zh-Hant":"件位置正確"};
+UI.tlTryAgain={en:"Green ones are right — move the others and check again.",es:"Las verdes están bien: mueve las demás y comprueba de nuevo.",fr:"Les vertes sont justes — déplacez les autres et revérifiez.",ja:"緑は正解です。他を動かして、もう一度チェックしてください。",pt:"As verdes estão certas — mova as outras e verifique de novo.",de:"Die grünen stimmen — verschieben Sie die anderen und prüfen Sie erneut.",ko:"초록색은 맞습니다. 나머지를 옮겨 다시 확인하세요.","zh-Hans":"绿色的是对的——把其他几件挪一挪，再检查一次。","zh-Hant":"綠色的是對的——把其他幾件挪一挪，再檢查一次。"}
+var QUIZ=[
+{person:"einstein",article:"einstein-main",a:1,
+ q:{en:"In which year did Einstein — then a 26-year-old patent-office clerk — publish the papers of his famous “miracle year”?","zh-Hans":"爱因斯坦 26 岁、还在专利局当小职员的时候，在哪一年发表了他著名的“奇迹年”论文？","zh-Hant":"愛因斯坦 26 歲、還在專利局當小職員的時候，在哪一年發表了他著名的「奇蹟年」論文？"},
+ opts:[{en:"1895"},{en:"1905"},{en:"1915"},{en:"1921"}]},
+{person:"tesla",article:"tesla-main",a:1,
+ q:{en:"In 1891, what did Tesla give up to help Westinghouse survive its financial crisis?","zh-Hans":"1891 年，特斯拉放弃了什么，来帮西屋公司渡过财务危机？","zh-Hant":"1891 年，特斯拉放棄了什麼，來幫西屋公司渡過財務危機？"},
+ opts:[{en:"His AC motor patent","zh-Hans":"他的交流电机专利","zh-Hant":"他的交流電機專利"},{en:"The $2.50-per-horsepower royalty in his contract","zh-Hans":"合同里每马力 2.50 美元的专利费","zh-Hant":"合約裡每馬力 2.50 美元的專利費"},{en:"His consulting job in Pittsburgh","zh-Hans":"他在匹兹堡的顾问工作","zh-Hant":"他在匹茲堡的顧問工作"},{en:"The Niagara Falls power contract","zh-Hans":"尼亚加拉水电站的合同","zh-Hant":"尼亞加拉水電站的合約"}]},
+{person:"curie",article:"curie-main",a:1,
+ q:{en:"Where did Marie and Pierre Curie process tons of pitchblende, pot after pot, to extract radium?","zh-Hans":"居里夫妇在哪里一锅一锅处理成吨的沥青铀矿，提炼出镭？","zh-Hant":"居里夫婦在哪裡一鍋一鍋處理成噸的瀝青鈾礦，提煉出鐳？"},
+ opts:[{en:"A modern university laboratory","zh-Hans":"一间现代化的大学实验室","zh-Hant":"一間現代化的大學實驗室"},{en:"A leaky wooden shed","zh-Hans":"一间漏风漏雨的小木棚","zh-Hant":"一間漏風漏雨的小木棚"},{en:"A hospital basement","zh-Hans":"医院的地下室","zh-Hant":"醫院的地下室"},{en:"The Paris Mint","zh-Hans":"巴黎造币厂","zh-Hant":"巴黎造幣廠"}]},
+{person:"cleopatra",article:"cleopatra-main",a:2,
+ q:{en:"According to the stories on this site, how many languages could Cleopatra speak — with no interpreter needed?","zh-Hans":"按本站文章的说法，埃及艳后不用翻译就能说多少种语言？","zh-Hant":"按本站文章的說法，埃及豔后不用翻譯就能說多少種語言？"},
+ opts:[{en:"Three","zh-Hans":"三种","zh-Hant":"三種"},{en:"Five","zh-Hans":"五种","zh-Hant":"五種"},{en:"Seven or more","zh-Hans":"七种以上","zh-Hant":"七種以上"},{en:"Only Greek and Latin","zh-Hans":"只有希腊语和拉丁语","zh-Hant":"只有希臘語和拉丁語"}]},
+{person:"davinci",article:"davinci-main",a:0,
+ q:{en:"Leonardo's notebooks run to more than 7,000 pages. Which of these did he famously sketch and study in them?","zh-Hans":"达·芬奇的笔记有 7000 多页，他在里面著名地画过、研究过什么？","zh-Hant":"達·芬奇的筆記有 7000 多頁，他在裡面著名地畫過、研究過什麼？"},
+ opts:[{en:"Flying machines","zh-Hans":"飞行器","zh-Hant":"飛行器"},{en:"Electric light bulbs","zh-Hans":"电灯泡","zh-Hant":"電燈泡"},{en:"Steam trains","zh-Hans":"蒸汽火车","zh-Hant":"蒸汽火車"},{en:"Printing presses","zh-Hans":"印刷机","zh-Hant":"印刷機"}]},
+{person:"newton",article:"newton-main",a:0,
+ q:{en:"What did Newton publish in 1687, setting out the laws of motion and universal gravitation?","zh-Hans":"1687 年，牛顿出版了哪本书，提出运动定律和万有引力？","zh-Hant":"1687 年，牛頓出版了哪本書，提出運動定律和萬有引力？"},
+ opts:[{en:"The Principia — Mathematical Principles of Natural Philosophy","zh-Hans":"《自然哲学的数学原理》","zh-Hant":"《自然哲學的數學原理》"},{en:"A treatise on alchemy","zh-Hans":"一本炼金术论著","zh-Hant":"一本煉金術論著"},{en:"A book of prophecies","zh-Hans":"一本预言书","zh-Hant":"一本預言書"},{en:"A grammar of Latin","zh-Hans":"一本拉丁语语法书","zh-Hant":"一本拉丁語語法書"}]},
+{person:"shakespeare",article:"shakespeare-main",a:1,
+ q:{en:"Shakespeare's “lost years” — when he vanishes from the records completely — lasted about how long?","zh-Hans":"莎士比亚从记录里彻底“消失”的那段失踪岁月，大约有多久？","zh-Hant":"莎士比亞從記錄裡徹底「消失」的那段失蹤歲月，大約有多久？"},
+ opts:[{en:"About 2 years","zh-Hans":"约 2 年","zh-Hant":"約 2 年"},{en:"About 7 years","zh-Hans":"约 7 年","zh-Hant":"約 7 年"},{en:"About 15 years","zh-Hans":"约 15 年","zh-Hant":"約 15 年"},{en:"About 20 years","zh-Hans":"约 20 年","zh-Hant":"約 20 年"}]},
+{person:"alexander",article:"alexander-main",a:2,
+ q:{en:"Who became Alexander's tutor when he was a teenager?","zh-Hans":"亚历山大十几岁的时候，谁成了他的老师？","zh-Hant":"亞歷山大十幾歲的時候，誰成了他的老師？"},
+ opts:[{en:"Plato","zh-Hans":"柏拉图","zh-Hant":"柏拉圖"},{en:"Socrates","zh-Hans":"苏格拉底","zh-Hant":"蘇格拉底"},{en:"Aristotle","zh-Hans":"亚里士多德","zh-Hant":"亞里士多德"},{en:"Homer","zh-Hans":"荷马","zh-Hant":"荷馬"}]},
+{person:"mozart",article:"mozart-main",a:0,
+ q:{en:"How old was Mozart when he wrote his first symphonies while in London?","zh-Hans":"莫扎特在伦敦写出第一批交响曲时，几岁？","zh-Hant":"莫札特在倫敦寫出第一批交響曲時，幾歲？"},
+ opts:[{en:"8 years old"},{en:"12 years old"},{en:"16 years old"},{en:"21 years old"}]},
+{person:"vangogh",article:"vangogh-main",a:2,
+ q:{en:"After failing as a dealer, a teacher and a preacher, at what age did Van Gogh finally start drawing seriously?","zh-Hans":"做画商、教师、传教士都失败之后，梵高几岁时才认真开始画画？","zh-Hant":"做畫商、教師、傳教士都失敗之後，梵高幾歲時才認真開始畫畫？"},
+ opts:[{en:"17","zh-Hans":"17 岁","zh-Hant":"17 歲"},{en:"21","zh-Hans":"21 岁","zh-Hant":"21 歲"},{en:"27","zh-Hans":"27 岁","zh-Hant":"27 歲"},{en:"35","zh-Hans":"35 岁","zh-Hant":"35 歲"}]}
+];
+var TL_ORDER=["einstein","curie","newton","alexander","mozart","vangogh"];
+var TL_DATA={
+einstein:[["1879",{en:"Born in Ulm, Germany","zh-Hans":"生于德国乌尔姆","zh-Hant":"生於德國烏爾姆"}],["1905",{en:"The “miracle year”: relativity papers at 26, from a patent-office desk","zh-Hans":"“奇迹年”：26 岁在专利局发表相对论等论文","zh-Hant":"「奇蹟年」：26 歲在專利局發表相對論等論文"}],["1915",{en:"Completed general relativity","zh-Hans":"完成广义相对论","zh-Hant":"完成廣義相對論"}],["1921",{en:"Won the Nobel Prize in Physics","zh-Hans":"获诺贝尔物理学奖","zh-Hant":"獲諾貝爾物理學獎"}],["1955",{en:"Died in Princeton, USA","zh-Hans":"在美国普林斯顿逝世","zh-Hant":"在美國普林斯頓逝世"}]],
+curie:[["1867",{en:"Born in Warsaw, then under Russian rule","zh-Hans":"生于华沙，当时波兰在俄国统治下","zh-Hant":"生於華沙，當時波蘭在俄國統治下"}],["1891",{en:"Left for Paris to study science","zh-Hans":"赴巴黎求学","zh-Hant":"赴巴黎求學"}],["1898",{en:"With Pierre, discovered polonium and radium","zh-Hans":"与皮埃尔共同发现钋和镭","zh-Hant":"與皮埃爾共同發現釙和鐳"}],["1903",{en:"Won the Nobel Prize in Physics","zh-Hans":"获诺贝尔物理学奖","zh-Hant":"獲諾貝爾物理學獎"}],["1934",{en:"Died from the effects of long radiation exposure","zh-Hans":"因长期辐射伤害逝世","zh-Hant":"因長期輻射傷害逝世"}]],
+newton:[["1643",{en:"Born premature at Woolsthorpe, not expected to live","zh-Hans":"在伍尔索普早产出生，一度被认为活不下来","zh-Hant":"在伍爾索普早產出生，一度被認為活不下來"}],["1665–66",{en:"Plague years at home: calculus, optics and gravity take shape","zh-Hans":"瘟疫年躲在家乡：微积分、光学和引力成形","zh-Hant":"瘟疫年躲在家鄉：微積分、光學和引力成形"}],["1687",{en:"Published the Principia — laws of motion and gravitation","zh-Hans":"出版《原理》：运动定律与万有引力","zh-Hant":"出版《原理》：運動定律與萬有引力"}],["1703",{en:"Became President of the Royal Society","zh-Hans":"成为皇家学会会长","zh-Hant":"成為皇家學會會長"}],["1727",{en:"Died in London; buried in Westminster Abbey","zh-Hans":"在伦敦逝世，葬于西敏寺","zh-Hant":"在倫敦逝世，葬於西敏寺"}]],
+alexander:[["356 BC",{en:"Born at Pella, son of King Philip II","zh-Hans":"生于佩拉，父王腓力二世","zh-Hant":"生於佩拉，父王腓力二世"}],["343 BC",{en:"Aristotle becomes his tutor","zh-Hans":"亚里士多德成为他的老师","zh-Hant":"亞里士多德成為他的老師"}],["336 BC",{en:"Becomes king at 20, after his father is assassinated","zh-Hans":"父王遇刺，20 岁登基为王","zh-Hant":"父王遇刺，20 歲登基為王"}],["331 BC",{en:"Founded Alexandria in Egypt; won the decisive Battle of Gaugamela","zh-Hans":"在埃及建亚历山大城，高加米拉决战获胜","zh-Hant":"在埃及建亞歷山大城，高加米拉決戰獲勝"}],["323 BC",{en:"Died at Babylon, aged 32","zh-Hans":"在巴比伦去世，年仅 32 岁","zh-Hant":"在巴比倫去世，年僅 32 歲"}]],
+mozart:[["1756",{en:"Born in Salzburg, son of a court musician","zh-Hans":"生于萨尔茨堡，父亲是宫廷乐师","zh-Hant":"生於薩爾茨堡，父親是宮廷樂師"}],["1764",{en:"In London, wrote his first symphonies at age eight","zh-Hans":"在伦敦，8 岁写出第一批交响曲","zh-Hant":"在倫敦，8 歲寫出第一批交響曲"}],["1781",{en:"Broke with Salzburg and settled in Vienna as a freelance musician","zh-Hans":"与萨尔茨堡决裂，到维也纳做自由音乐家","zh-Hant":"與薩爾茨堡決裂，到維也納做自由音樂家"}],["1786",{en:"The Marriage of Figaro premiered in Vienna","zh-Hans":"《费加罗的婚礼》在维也纳首演","zh-Hant":"《費加羅的婚禮》在維也納首演"}],["1791",{en:"The Magic Flute and the unfinished Requiem — died aged 35","zh-Hans":"《魔笛》与未完成的《安魂曲》——35 岁逝世","zh-Hant":"《魔笛》與未完成的《安魂曲》——35 歲逝世"}]],
+vangogh:[["1853",{en:"Born in Zundert, Netherlands, a pastor's son","zh-Hans":"生于荷兰津德尔特，牧师之子","zh-Hant":"生於荷蘭津德爾特，牧師之子"}],["1880",{en:"Began to draw seriously at 27, supported by his brother Theo","zh-Hans":"27 岁认真开始画画，靠弟弟提奥接济","zh-Hant":"27 歲認真開始畫畫，靠弟弟提奧接濟"}],["1885",{en:"Painted The Potato Eaters, his first major work","zh-Hans":"画出《吃土豆的人》，第一件重要作品","zh-Hant":"畫出《吃土豆的人》，第一件重要作品"}],["1889",{en:"At the Saint-Rémy asylum he painted The Starry Night","zh-Hans":"在圣雷米疗养院画出《星夜》","zh-Hant":"在聖雷米療養院畫出《星夜》"}],["1890",{en:"Died at Auvers-sur-Oise, aged 37","zh-Hans":"在奥维尔逝世，年仅 37 岁","zh-Hant":"在奧維爾逝世，年僅 37 歲"}]]
+};
+var quiz={idx:0,picked:-1,answers:[],done:false};
+var tl={pi:0,pool:[],placed:[],checked:false,solved:false};
+function shuffle(a){for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function tlReset(){var n=TL_DATA[TL_ORDER[tl.pi]].length;var arr=[];for(var i=0;i<n;i++)arr.push(i);do{shuffle(arr);}while(arr.join()===TL_ORDER.map(function(_,i){return i;}).join()&&false||arr.every(function(v,i){return v===i;}));tl.pool=arr;tl.placed=[];tl.checked=false;tl.solved=false;}
+function renderGames(){
+ var nav=document.querySelector('[data-i18n-nav="play"]'); if(nav)nav.textContent=L(UI.navPlay);
+ document.getElementById("playHeading").textContent=L(UI.playHeading);
+ document.getElementById("playSub").textContent=L(UI.playSub);
+ document.getElementById("quizTitle").textContent=L(UI.quizTitle);
+ document.getElementById("quizDesc").textContent=L(UI.quizDesc);
+ document.getElementById("tlTitle").textContent=L(UI.tlTitle);
+ document.getElementById("tlDesc").textContent=L(UI.tlDesc);
+ renderQuiz();renderTlPersons();renderTl();
+}
+function renderQuiz(){
+ var box=document.getElementById("quizBody"); if(!box)return;
+ if(quiz.done){
+  var sc=quiz.answers.filter(function(x){return x;}).length;
+  var msg=sc>=8?L(UI.scoreGreat):(sc>=5?L(UI.scoreGood):L(UI.scoreLow));
+  var h='<div class="g-score">'+esc(L(UI.yourScore))+" · "+sc+" / 10</div><p class=\"g-desc\">"+esc(msg)+"</p>";
+  h+='<div class="g-review">'+QUIZ.map(function(q,i){
+   var ok=quiz.answers[i];
+   var rv='<div class="rv"><p><b>'+(i+1)+". "+esc(L(personMap[q.person].name))+"</b> · "+esc(L(q.q))+"</p>";
+   rv+="<p>"+esc(L(UI.answerIs))+"：<b>"+esc(L(q.opts[q.a]))+"</b></p>";
+   if(!ok)rv+='<p>'+esc(L(UI.yourPick))+"："+esc(L(q.opts[quiz.picks[i]]))+'</p><button class="linkbtn" data-read="'+q.article+'">'+esc(L(UI.readStory))+"</button>";
+   return rv+"</div>";
+  }).join("")+"</div>";
+  h+='<div class="g-row"><button class="btn primary" id="quizAgain">'+esc(L(UI.playAgain))+"</button></div>";
+  box.innerHTML=h;
+  document.getElementById("quizAgain").addEventListener("click",function(){quiz={idx:0,picked:-1,answers:[],picks:[],done:false};renderQuiz();});
+  Array.prototype.forEach.call(box.querySelectorAll("[data-read]"),function(b){b.addEventListener("click",function(){openArticle(b.getAttribute("data-read"));});});
+  return;
+ }
+ var q=QUIZ[quiz.idx];
+ var answered=quiz.picked>-1;
+ var h='<div class="g-progress">'+esc(L(UI.qOf))+" "+(quiz.idx+1)+" "+esc(L(UI.qOfSuffix))+" · "+esc(L(personMap[q.person].name))+"</div>";
+ h+='<p class="g-q">'+esc(L(q.q))+"</p>";
+ h+='<div class="g-opts">'+q.opts.map(function(o,i){
+   var cls="g-opt"; if(answered&&i===q.a)cls+=" right"; else if(answered&&i===quiz.picked)cls+=" wrong"; else if(i===quiz.picked)cls+=" picked";
+   return '<button class="'+cls+'" data-opt="'+i+'"'+(answered?" disabled":"")+">"+esc(L(o))+"</button>";
+ }).join("")+"</div>";
+ if(answered){
+  var ok=quiz.picked===q.a;
+  h+='<p class="g-fb">'+(ok?"<b>"+esc(L(UI.rightFb))+"</b>":esc(L(UI.wrongFb)))+"</p>";
+  h+='<div class="g-row"><button class="btn primary" id="quizNext">'+esc(quiz.idx===QUIZ.length-1?L(UI.seeScore):L(UI.nextQ))+"</button>";
+  if(!ok)h+='<button class="linkbtn" data-read="'+q.article+'">'+esc(L(UI.readStory))+"</button>";
+  h+="</div>";
+ }
+ box.innerHTML=h;
+ Array.prototype.forEach.call(box.querySelectorAll("[data-opt]"),function(b){b.addEventListener("click",function(){quiz.picked=parseInt(b.getAttribute("data-opt"),10);renderQuiz();});});
+ Array.prototype.forEach.call(box.querySelectorAll("[data-read]"),function(b){b.addEventListener("click",function(){openArticle(b.getAttribute("data-read"));});});
+ var nb=document.getElementById("quizNext");
+ if(nb)nb.addEventListener("click",function(){
+   if(!quiz.picks)quiz.picks=[];
+   quiz.picks[quiz.idx]=quiz.picked; quiz.answers[quiz.idx]=quiz.picked===QUIZ[quiz.idx].a;
+   quiz.picked=-1;
+   if(quiz.idx===QUIZ.length-1){quiz.done=true;}else{quiz.idx++;}
+   renderQuiz();
+ });
+}
+quiz.picks=[];
+function renderTlPersons(){
+ var box=document.getElementById("tlPersons");
+ box.innerHTML=TL_ORDER.map(function(pid,i){return '<button class="chip" data-tlp="'+i+'" aria-pressed="'+(tl.pi===i)+'">'+esc(L(personMap[pid].name))+"</button>";}).join("");
+ Array.prototype.forEach.call(box.querySelectorAll("[data-tlp]"),function(b){b.addEventListener("click",function(){tl.pi=parseInt(b.getAttribute("data-tlp"),10);tlReset();renderTlPersons();renderTl();});});
+}
+function renderTl(){
+ var box=document.getElementById("tlBody"); if(!box)return;
+ var data=TL_DATA[TL_ORDER[tl.pi]];
+ var h='<p class="g-desc">'+esc(L(UI.tlTapHint))+"</p>";
+ h+='<div class="tl-label">'+esc(L(UI.tlPoolLabel))+" · "+esc(L(personMap[TL_ORDER[tl.pi]].name))+"</div>";
+ h+='<div class="tl-pool" id="tlPool">'+(tl.pool.length?tl.pool.map(function(ei){return '<button class="tl-item" draggable="true" data-pool="'+ei+'">'+esc(L(data[ei][1]))+"</button>";}).join(""):'<div class="tl-empty">'+esc(L(UI.tlEmpty))+"</div>")+"</div>";
+ h+='<div class="tl-label">'+esc(L(UI.tlYourLabel))+"</div>";
+ h+='<div class="tl-placed" id="tlPlaced">'+(tl.placed.length?tl.placed.map(function(ei,pos){
+    var okCls=tl.checked&&ei===pos?" ok":"";
+    var yr=tl.checked&&ei===pos?' <b>· '+esc(data[ei][0])+"</b>":"";
+    return '<button class="tl-item'+okCls+'" data-placed="'+pos+'">'+(pos+1)+". "+esc(L(data[ei][1]))+yr+"</button>";
+  }).join(""):'<div class="tl-empty">'+esc(L(UI.tlEmpty))+"</div>")+"</div>";
+ h+='<p class="g-fb" id="tlFb"></p>';
+ h+='<div class="g-row"><button class="btn primary" id="tlCheck">'+esc(L(UI.checkBtn))+"</button><button class=\"btn\" id=\"tlResetBtn\">"+esc(L(UI.resetBtn))+"</button><button class=\"btn\" id=\"tlNext\">"+esc(L(UI.nextPerson))+"</button></div>";
+ box.innerHTML=h;
+ Array.prototype.forEach.call(box.querySelectorAll("[data-pool]"),function(b){
+  b.addEventListener("click",function(){var ei=parseInt(b.getAttribute("data-pool"),10);tl.pool=tl.pool.filter(function(x){return x!==ei;});tl.placed.push(ei);tl.checked=false;renderTl();});
+  b.addEventListener("dragstart",function(e){e.dataTransfer.setData("text/plain",b.getAttribute("data-pool"));});
+ });
+ Array.prototype.forEach.call(box.querySelectorAll("[data-placed]"),function(b){
+  b.addEventListener("click",function(){var pos=parseInt(b.getAttribute("data-placed"),10);var ei=tl.placed[pos];tl.placed.splice(pos,1);tl.pool.push(ei);tl.checked=false;renderTl();});
+ });
+ var placedEl=document.getElementById("tlPlaced");
+ placedEl.addEventListener("dragover",function(e){e.preventDefault();});
+ placedEl.addEventListener("drop",function(e){e.preventDefault();var ei=parseInt(e.dataTransfer.getData("text/plain"),10);if(tl.pool.indexOf(ei)>-1){tl.pool=tl.pool.filter(function(x){return x!==ei;});tl.placed.push(ei);tl.checked=false;renderTl();}});
+ document.getElementById("tlCheck").addEventListener("click",function(){
+  var fb=document.getElementById("tlFb");
+  if(tl.placed.length<data.length){fb.textContent=L(UI.tlNeedAll);return;}
+  tl.checked=true;
+  var right=tl.placed.filter(function(ei,pos){return ei===pos;}).length;
+  tl.solved=right===data.length;
+  renderTl();
+  var fb2=document.getElementById("tlFb");
+  fb2.innerHTML=tl.solved?"<b>"+esc(L(UI.tlPerfect))+"</b>":(right+" / "+data.length+" "+esc(L(UI.tlSomeRight))+" · "+esc(L(UI.tlTryAgain)));
+ });
+ document.getElementById("tlResetBtn").addEventListener("click",function(){tlReset();renderTl();});
+ document.getElementById("tlNext").addEventListener("click",function(){tl.pi=(tl.pi+1)%TL_ORDER.length;tlReset();renderTlPersons();renderTl();});
+}
+tlReset();
+renderGames();
+document.getElementById("langSelect").addEventListener("change",function(){renderGames();});
 </script>
 </body>
 </html>
