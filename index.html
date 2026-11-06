@@ -163,6 +163,17 @@ section.block{padding:38px 0 6px}
 .plat b{font-size:15px}
 .plat span{color:var(--muted);font-size:13px;text-align:right}
 .plat a:hover{border-color:var(--red)}
+/* follow us */
+.follow-list{display:flex;flex-direction:column;gap:10px;margin-top:18px}
+.follow-item{display:flex;justify-content:space-between;align-items:center;gap:16px;border:1px solid var(--line);border-radius:12px;padding:14px 18px;text-decoration:none;background:var(--surface);box-shadow:var(--shadow)}
+.follow-item:hover{border-color:var(--red)}
+.follow-left{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;min-width:0}
+.follow-left b{font-size:16px;white-space:nowrap}
+.follow-left .handle{font-size:14px;color:var(--ink)}
+.follow-left .note{font-size:12.5px;color:var(--red-dark);background:var(--red-soft);padding:3px 8px;border-radius:999px;font-weight:700;line-height:1.4}
+.follow-url{font-family:"EB Garamond",Georgia,"Times New Roman",serif;font-size:14px;color:var(--muted);text-align:right;word-break:break-all;line-height:1.4}
+.follow-arrow{color:var(--muted);font-size:18px;flex:none;line-height:1}
+@media(max-width:640px){.follow-item{flex-wrap:wrap;row-gap:4px}.follow-url{text-align:right}.follow-left{gap:6px 10px}}
 footer{margin-top:48px;border-top:1px solid var(--line);padding:26px 0 40px;color:var(--muted);font-size:13px;line-height:1.9}
 footer .src{font-size:12px}
 
@@ -300,6 +311,41 @@ footer .src{font-size:12px}
           <div><b>这个博客 <span class="en-i" lang="en">This Blog</span></b><span>文字稿首发地，按名人分篇存档 · <span class="en-i" lang="en">Where drafts debut, archived by person</span></span></div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- FOLLOW US -->
+  <section class="block" id="follow-sec">
+    <div class="sec-head"><h2>关注我们<span class="en" lang="en">Follow Us</span></h2><p>所有平台都在这里，点开就能找到我们<span class="en" lang="en">Find us on every platform — tap any row to visit.</span></p></div>
+    <div class="follow-list">
+      <a class="follow-item" href="https://www.youtube.com/@hokomaco" target="_blank" rel="noopener">
+        <span class="follow-left"><b>YouTube</b><span class="handle">@hokomaco</span></span>
+        <span class="follow-url" lang="en">youtube.com/@hokomaco</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://www.tiktok.com/@comamaco8" target="_blank" rel="noopener">
+        <span class="follow-left"><b>TikTok</b><span class="handle">@comamaco8</span><span class="note">临时用户名 · <span class="en-i" lang="en">temporary username</span></span></span>
+        <span class="follow-url" lang="en">tiktok.com/@comamaco8</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://medium.com/@hokomaco" target="_blank" rel="noopener">
+        <span class="follow-left"><b>Medium</b><span class="handle">@hokomaco</span></span>
+        <span class="follow-url" lang="en">medium.com/@hokomaco</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://hokomaco.substack.com/" target="_blank" rel="noopener">
+        <span class="follow-left"><b>Substack</b><span class="handle">hokomaco</span></span>
+        <span class="follow-url" lang="en">hokomaco.substack.com</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://www.pinterest.com/hokomaco/" target="_blank" rel="noopener">
+        <span class="follow-left"><b>Pinterest</b><span class="handle">@hokomaco</span></span>
+        <span class="follow-url" lang="en">pinterest.com/hokomaco</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://github.com/hokomaco" target="_blank" rel="noopener">
+        <span class="follow-left"><b>GitHub</b><span class="handle">hokomaco</span><span class="note">注册进行中 · <span class="en-i" lang="en">Registration in progress</span></span></span>
+        <span class="follow-url" lang="en">github.com/hokomaco</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
+      <a class="follow-item" href="https://hokomaco.netlify.app/" target="_blank" rel="noopener">
+        <span class="follow-left"><b>本站 <span class="en-i" lang="en">This Site</span></b><span class="handle">hokomaco</span></span>
+        <span class="follow-url" lang="en">hokomaco.netlify.app</span><span class="follow-arrow" aria-hidden="true">→</span>
+      </a>
     </div>
   </section>
 
