@@ -208,6 +208,10 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
 .r-nav{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap}
 .r-nav .btn{flex:1 1 200px;padding:14px;white-space:normal;line-height:1.5}
 .fontctl{margin-left:auto;display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.reader-bar-in .fontctl{order:1}
+.reader-langctl{order:2;margin-left:6px;display:flex;align-items:center;gap:8px;flex:none}
+.reader-langctl label{font-size:12px;color:var(--muted);font-weight:600;letter-spacing:.04em;white-space:nowrap}
+@media(max-width:640px){.reader-langctl{margin-left:6px}.reader-langctl .lang-select{max-width:152px;font-size:13px;padding:7px 28px 7px 12px}}
 @media(max-width:520px){.r-nav{flex-direction:column}.r-nav .btn{flex:1 1 auto;width:100%}}
 .play-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
 @media(max-width:860px){.play-grid{grid-template-columns:1fr}}
@@ -328,6 +332,14 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
   <div class="reader-bar"><div class="reader-bar-in">
     <button class="btn" id="closeReader"></button>
     <div class="fontctl"><span style="font-size:13px;color:var(--muted)" id="fontSizeLabel"></span><button class="btn" id="fontToggle" aria-pressed="false"></button></div>
+    <div class="langctl reader-langctl">
+      <label for="readerLangSelect" id="readerLangLabel">Language</label>
+      <select id="readerLangSelect" class="lang-select" aria-label="Language">
+        <option value="en">English</option>
+        <option value="zh-Hans">简体中文</option>
+        <option value="zh-Hant">繁體中文</option>
+      </select>
+    </div>
   </div></div>
   <article class="reader-main">
     <div class="r-tags" id="rTags"></div>
@@ -1938,6 +1950,39 @@ if(document.fonts&&document.fonts.load){
   document.fonts.load(w+" 16px \"Noto Serif TC\"","中文繁體名人傳記");
  });
 }
+</script>
+<script>
+(function(){
+ var mainSel=document.getElementById("langSelect");
+ var readerSel=document.getElementById("readerLangSelect");
+ if(!mainSel||!readerSel) return;
+ var readerLabel=document.getElementById("readerLangLabel");
+ function syncFromCurrent(){
+   var v=(typeof curLang!=="undefined"&&curLang)?curLang:mainSel.value;
+   if(readerSel.value!==v) readerSel.value=v;
+   if(readerLabel&&typeof UI!=="undefined"&&UI.langLabel&&typeof L==="function"){
+     var txt=L(UI.langLabel);
+     readerLabel.textContent=txt;
+     readerSel.setAttribute("aria-label",txt);
+   }
+ }
+ mainSel.addEventListener("change",function(){ readerSel.value=mainSel.value; });
+ readerSel.addEventListener("change",function(){
+   var v=readerSel.value;
+   if(mainSel.value!==v) mainSel.value=v;
+   var ev;
+   try{ ev=new Event("change",{bubbles:true}); }catch(e){ ev=document.createEvent("Event"); ev.initEvent("change",true,false); }
+   mainSel.dispatchEvent(ev);
+   // If the main handler loads fonts asynchronously, sync again shortly after.
+   setTimeout(syncFromCurrent,50);
+   setTimeout(syncFromCurrent,350);
+ });
+ if(typeof renderAll==="function"){
+   var _renderAllReaderLang=renderAll;
+   renderAll=function(){ _renderAllReaderLang(); syncFromCurrent(); try{ if(typeof renderGames==="function") renderGames(); }catch(e){} try{ if(typeof renderLegal==="function") renderLegal(); }catch(e){} };
+ }
+ syncFromCurrent();
+})();
 </script>
 </body>
 </html>
