@@ -24,9 +24,10 @@ h1,h2,h3,h4,p,span,b,li,a{overflow-wrap:break-word}
 a{color:inherit}button{font:inherit;cursor:pointer}
 .topbar{position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--surface) 92%,transparent);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 .topbar-in{max-width:min(96vw,3200px);margin:0 auto;padding:10px clamp(12px,2vw,32px);display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;width:100%}
-.logo{font-weight:900;font-size:28px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;flex:0 1 auto;min-width:0;font-family:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;font-stretch:normal;text-transform:uppercase;color:var(--ink);line-height:1.05}
+.logo{font-weight:900;font-size:28px;letter-spacing:-.01em;text-decoration:none;white-space:nowrap;flex:0 1 auto;min-width:0;font-family:"Archivo","Helvetica Neue",Helvetica,Arial,sans-serif;font-stretch:normal;text-transform:uppercase;color:var(--ink);line-height:1.05;display:inline-flex;flex-direction:column;align-items:center;text-align:center}
+.logo-title{display:block;white-space:nowrap}
 .logo b{color:var(--red);font-weight:900}
-.logo small{display:block;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.14em;white-space:normal}
+.logo small{display:block;font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.14em;white-space:normal;text-align:center;width:0;min-width:100%;overflow-wrap:break-word;line-height:1.45;margin-top:2px}
 .search{flex:1 1 200px;max-width:min(32vw,560px);min-width:0;display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:8px 14px}
 .search input{flex:1;border:0;background:transparent;color:var(--ink);font-size:14px;outline:none;min-width:0;width:100%;text-overflow:ellipsis;font:inherit}
 .topnav{display:flex;gap:4px;flex-wrap:wrap}
@@ -37,7 +38,7 @@ a{color:inherit}button{font:inherit;cursor:pointer}
 .lang-select{appearance:none;-webkit-appearance:none;border:1.5px solid var(--ink);background:var(--surface);color:var(--ink);border-radius:999px;padding:8px 32px 8px 14px;font-size:14px;font-weight:700;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23888' fill='none' stroke-width='1.5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;max-width:190px}
 .lang-select:hover{border-color:var(--red);color:var(--red-dark)}
 @media(max-width:1024px){.topbar-in{flex-wrap:wrap}.search{flex:1 1 240px;max-width:100%}.langctl{margin-left:0}}
-@media(max-width:760px){.topnav{display:none}.topbar-in{gap:8px 12px;padding:10px 14px}.logo{font-size:22px;flex:1 1 auto;white-space:normal}.logo small{letter-spacing:.04em;font-size:9px;line-height:1.5}.search{order:4;flex:1 1 100%;max-width:100%;width:100%;padding:9px 14px}.search input{font-size:16px}.langctl{order:2;margin-left:auto}.lang-select{max-width:160px;font-size:13px;padding:7px 28px 7px 12px}}
+@media(max-width:760px){.topnav{display:none}.topbar-in{gap:8px 12px;padding:10px 14px}.logo{font-size:22px;flex:0 1 auto;white-space:normal}.logo small{letter-spacing:.04em;font-size:9px;line-height:1.5}.search{order:4;flex:1 1 100%;max-width:100%;width:100%;padding:9px 14px}.search input{font-size:16px}.langctl{order:2;margin-left:auto}.lang-select{max-width:160px;font-size:13px;padding:7px 28px 7px 12px}}
 .wrap{max-width:min(96vw,3200px);margin:0 auto;padding:0 clamp(12px,2vw,32px);width:100%}
 .hero{padding:34px 0 8px;display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(20px,2.5vw,48px);align-items:center}
 @media(min-width:1600px){.hero{padding-top:48px}.hero-card img{height:440px}}
@@ -193,7 +194,7 @@ footer .src{font-size:12.5px;display:block;margin-top:6px}
 <body data-lang="en">
 <header class="topbar">
   <div class="topbar-in">
-    <a class="logo" href="#top">HOKO<b>MACO</b><small id="logoSub">BIOGRAPHY STORY BLOG</small></a>
+    <a class="logo" href="#top"><span class="logo-title">HOKO<b>MACO</b></span><small id="logoSub">BIOGRAPHY STORY BLOG</small></a>
     <label class="search"><span aria-hidden="true">🔍</span><input id="searchInput" type="search" placeholder="Search: Nobel, current, Mona Lisa"></label>
     <nav class="topnav">
       <a href="#feed-sec" data-i18n-nav="notes">Notes</a>
